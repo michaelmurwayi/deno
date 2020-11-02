@@ -54,3 +54,7 @@ class rental(models.Model):
             raise ValidationError('rental ended before start')
     def __str__(self):
         return str(self.id)
+
+
+class Messages(models.Model):
+    message = models.TextField(max_length=100)

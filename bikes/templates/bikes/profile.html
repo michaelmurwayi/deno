@@ -1,0 +1,125 @@
+{% extends 'bikes/base.html' %}
+{% load static %}
+{% block content %}
+  {% if request.user.is_authenticated %}
+  <div id="6" class="container-fluid"></div>
+
+  <h2 class="mt-5"> User Training Video</h2>
+  <section class="  row videos mt-5">
+    <div id="1" class="card  videos col-md-3 embed-responsive embed-responsive-16by9">
+      <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/v64KOxKVLVg" allowfullscreen></iframe>
+    </div>
+    <div id="2" class=" card col-md-3 embed-responsive embed-responsive-16by9">
+      <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/v64KOxKVLVg" allowfullscreen></iframe>
+    </div>
+    <div id="3" class=" card col-md-3 embed-responsive embed-responsive-16by9">
+      <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/v64KOxKVLVg" allowfullscreen></iframe>
+    </div>
+    <div id="4" class=" card col-md-3 embed-responsive embed-responsive-16by9">
+      <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/v64KOxKVLVg" allowfullscreen></iframe>
+    </div>
+
+    </div>
+
+  </section>
+
+  <hr class="my-5">
+  <!-- Section: Cascading panels -->
+  <center>
+
+    <div class="row">
+      <div class="text-center ml-5">
+    {% if rentals %}
+    <h1>Currently rented bikes:</h1>
+      <p class="lead">Remember to return them!</p>
+      <table class="table-responsive">
+        <tr>
+          <th>Bike number</th>
+          <th>Start station</th>
+          <th>Rental start</th>
+          <th class="col-xs-1"></th>
+        </tr>
+        {% for rental in rentals %}
+          <tr>
+            <td>{{ rental.bike.id }}</td>
+            <td>{{ rental.start_station.address }}</td>
+            <td>{{ rental.start_date }}</td>
+            <td class="col-xs-1">
+              <form action="{% url 'bikes:stations' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name='rental_id' value="{{ rental.id }}"></input>
+                <button class="btn btn-default" type="submit" name="bike_return">Return bike</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+    {% if request.user.user.in_debt %}
+    <h1>You are broke, you balance is {{request.user.user.balance}}.</h1>
+        <p class="lead">Top-up account before rental.</p>
+        {% else %}
+        <h1 class="text-center">No bikes rented at the moment.</h1>
+        <p class="lead">Go ahead and rent something!</p>
+        <button class="btn btn-success"><a  href="{% url 'bikes:stations' %}">Stations</a></button>
+      {% endif %}
+      {% endif %}
+    </div>
+  </div>
+  {% else %}
+  <div class="row">
+    <div class="col-lg-12 text-center">
+      <h1>Urban Bikes - bike rentals all over Wrocław</h1>
+      <p class="lead"> User not logged in. </p>
+    </div>
+  </div>
+  {% endif %}
+  
+  <!-- /.container-fluid -->
+  <div class="col-md-12 container-fluid card" style="background-color: ;">
+   <hr>
+   <div class=" notification-header ">
+     <hr>
+     <!--Section heading-->
+     <h3 class="h1-responsive font-weight-bold text-center my-4">Book Training With Text</h3>
+     <!--Section description-->
+     <p class="text-center w-responsive mx-auto mb-5">Send Direct message.</p>
+   </div>
+   <div class="card-body">
+     <div class="row">
+
+       <!--Grid column-->
+       <div class="col-md-12 mb-md-0 mb-5">
+         <form id="contact-form" name="contact-form" action="" method="POST">
+           {% csrf_token %}
+           <!-- Grid column-->
+           <div class="col-md-12">
+             <div class="alert alert-success" style="height: 45px;">
+               <p class="pt-0"><small>This message will directly go to all your users</small> </p>
+             </div>
+             <div class="col-md-12">
+               <label> <b><strong>
+                     <h4 class="h1-responsive font-weight-bold text-center ">Message</h4>
+                   </strong></b></label>
+             </div>
+             <div class="md-form">
+               {{ form.message }}
+
+             </div>
+             <div class="submit pt-3">
+               <button class="btn btn-warning"> <strong>
+                   <b>
+                     <<>>
+                   </b>
+                 </strong> </button>
+             </div>
+           </div>
+       </div>
+       <!--Grid row-->
+
+       </form>
+     </div>
+   </div>
+
+  {% endblock %}
+</center>
